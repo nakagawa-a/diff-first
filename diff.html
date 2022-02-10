@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>DIFF</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css" />
+  <link rel="stylesheet" href="./vender/diff2html-master/dist/diff2html.min.css" />
+  <style>
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .column,
+    .columns {
+      width: 100%;
+      float: left;
+      box-sizing: border-box;
+    }
+
+    /*For devices larger than 400px */
+
+    @media (min-width: 400px) {
+      .container {
+        width: 85%;
+        padding: 0;
+      }
+    }
+
+    /*For devices larger than 550px */
+
+    @media (min-width: 550px) {
+      .container {
+        width: 90%;
+      }
+
+      .column,
+      .columns {
+        margin-left: 4%;
+      }
+
+      .column:first-child,
+      .columns:first-child {
+        margin-left: 0;
+      }
+
+      .one.column,
+      .one.columns {
+        width: 4.66666666667%;
+      }
+
+      .two.columns {
+        width: 13.3333333333%;
+      }
+
+      .three.columns {
+        width: 22%;
+      }
+
+      .four.columns {
+        width: 30.6666666667%;
+      }
+
+      .five.columns {
+        width: 39.3333333333%;
+      }
+
+      .six.columns {
+        width: 48%;
+      }
+
+      .seven.columns {
+        width: 56.6666666667%;
+      }
+
+      .eight.columns {
+        width: 65.3333333333%;
+      }
+
+      .nine.columns {
+        width: 74%;
+      }
+
+      .ten.columns {
+        width: 82.6666666667%;
+      }
+
+      .eleven.columns {
+        width: 91.3333333333%;
+      }
+
+      .twelve.columns {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .one-third.column {
+        width: 30.6666666667%;
+      }
+
+      .two-thirds.column {
+        width: 65.3333333333%;
+      }
+
+      .one-half.column {
+        width: 48%;
+      }
+    }
+
+    /*Self Clearing Goodness .container:after,*/
+    .row:after,
+    .u-cf {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    body {
+      width: 96%;
+      margin: 0 auto;
+      font-family: "Open Sans", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+      word-wrap: break-word;
+    }
+
+    .container {
+      max-width: 1200px;
+    }
+
+    #sidemenu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: sticky;
+      top: 10px;
+    }
+
+    @media (max-width: 549px) {
+      #sidemenu {
+        padding-top: 50px;
+      }
+    }
+
+    h4 {
+      background: skyblue;
+    }
+
+    summary {
+      background: skyblue;
+      margin: 10px 0 0 0;
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    /* table > tbody > tr + tr > td {
+        border-top: none;
+      } */
+
+    .d2h-diff-tbody {
+      background: white;
+    }
+
+    .d2h-file-list-wrapper {
+      display: none;
+    }
+
+    .d2h-diff-tbody tr:last-child>td.d2h-cntx {
+      border-width: 0 1px 1px 1px;
+      border-bottom: solid #eee;
+    }
+
+    .d2h-file-side-diff:last-child .d2h-info:last-child {
+      border-right: solid #eee;
+    }
+
+    .d2h-code-line-prefix,
+    .d2h-code-side-linenumber {
+      user-select: none;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="./vender/difflib.js-master/dist/difflib-browser.js"></script>
+  <script src="./vender/diff2html-master/dist/diff2html.min.js"></script>
+  <script>
+    function getUniqueStr(myStrong) {
+      var strong = 1000;
+      if (myStrong) strong = myStrong;
+      return (
+        new Date().getTime().toString(16) +
+        Math.floor(strong * Math.random()).toString(16)
+      );
+    }
+    //ユニークキー：キャッシュ対策（開発中は毎回最新を読み込ませる）
+    var uuid = getUniqueStr();
+
+    //設置するidタグ
+    var selectorA;
+    var selectorB;
+
+    //diffの設定
+    var format = {
+      inputFormat: "diff",
+      showFiles: true,
+      matching: "lines",
+      outputFormat: "side-by-side"
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns" id="maincontents">
+        <div style="padding:5px;">
+          <h1>DIFFツールサンプル</h1>
+          <h2>index.htmlの変更前後の差分</h2>
+          <div id="diff00_01"></div>
+          <script>
+            /*global $,uuid,difflib,Diff2Html,format */
+            $.get("src_00_before/index.html?d=" + uuid, function(readFile00) {
+              $.get("src_01_after/index.html?d=" + uuid, function(readFile01) {
+                //改行コードごとに配列化
+                var inputFile00wk = readFile00.split(["\n"]);
+                var inputFile01wk = readFile01.split(["\n"]);
+
+                //unifiedDiffの設定
+                var difflibData00 = difflib.unifiedDiff(
+                  inputFile00wk,
+                  inputFile01wk, {
+                    fromfile: "index.html",
+                    tofile: "index.html",
+                    lineterm: ""
+                  }
+                );
+
+                // difflibData00.unshift('diff --git sketch.js sketch.js');
+                var difflibDataJoin00 = difflibData00.join(["\n"]);
+                var diffHtml00 = Diff2Html.getPrettyHtml(difflibDataJoin00, format);
+                $("#diff00_01").html(diffHtml00);
+              });
+            });
+          </script>
+
+          <hr />
+
+        </div>
+        <div style="padding:5px;">
+          <h1></h1>
+          <h2>main.jsの変更前後の差分</h2>
+          <div id="diff00_02"></div>
+          <script>
+            /*global $,uuid,difflib,Diff2Html,format */
+            $.get("src_00_before/main.js.txt?d=" + uuid, function(readFile00) {
+              $.get("src_01_after/main.js.txt?d=" + uuid, function(readFile01) {
+                //改行コードごとに配列化
+                var inputFile00wk = readFile00.split(["\n"]);
+                var inputFile01wk = readFile01.split(["\n"]);
+
+                //unifiedDiffの設定
+                var difflibData00 = difflib.unifiedDiff(
+                  inputFile00wk,
+                  inputFile01wk, {
+                    fromfile: "main.js",
+                    tofile: "main.js",
+                    lineterm: ""
+                  }
+                );
+
+                // difflibData00.unshift('diff --git sketch.js sketch.js');
+                var difflibDataJoin00 = difflibData00.join(["\n"]);
+                var diffHtml00 = Diff2Html.getPrettyHtml(difflibDataJoin00, format);
+                $("#diff00_02").html(diffHtml00);
+              });
+            });
+          </script>
+
+          <hr />
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
