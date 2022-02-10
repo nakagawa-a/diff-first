@@ -1,5 +1,11 @@
 ## DIFFツールサンプル
 
+
+```
+git clone https://github.com/nakagawa-a/diff-first.git 
+```
+
+
 ### ID名とファイル名を変更すれば、動くはず
 
 [![Image from Gyazo](https://i.gyazo.com/381f87a9a5ae9b5e3e5a76f08cb999cc.png)](https://gyazo.com/381f87a9a5ae9b5e3e5a76f08cb999cc)
